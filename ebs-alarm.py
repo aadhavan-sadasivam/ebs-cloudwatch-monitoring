@@ -21,6 +21,7 @@ EBS_PREFIX = "EBS_"
 MODE_CREATE = "CREATE"  # create/update alarms
 MODE_DELETE = "DELETE"  # delete alarms
 MODE_DISABLE = "DISABLE"  # disable alarms
+MODE_NO_OP = "NO_OP"  # disable alarms
 
 
 class AlarmClient:
@@ -397,7 +398,9 @@ class AlarmClient:
 def main():
     config = read_alarm_config()
     client = AlarmClient(config)
-    run_mode = os.getenv("RUN_MODE", MODE_CREATE)
+    run_mode = os.getenv("RUN_MODE", MODE_NO_OP)
+    if run_mode == MODE_NO_OP:
+        logger.info("Running script in no op mode")
     if run_mode == MODE_CREATE:
         logger.info("Running script in create mode")
         client.create()
